@@ -27,22 +27,33 @@ class Levels {
             btn.addEventListener("click", () => {
                 this.load(val, () => {
                     console.log(`start level ${val}`);
-                })
+                    document.dispatchEvent(new CustomEvent("startGame", {"detail": { val } } ));
+                });
             });
         }
     }
     load(no, startgame) {
-        this.currentLevel = {
+        this._currentLevel = {
             no,
             hero: []
         };
+        this.score = 0;
         this.scoreEl.innerText = `Score: ${this.score}`;
         assets.setOnLoad(startgame);
         const level = this.data[no];
-        this.currentLevel.backgroundImage = assets.loadImg(`/images/backgrounds/${level.background}.png`);
-        this.currentLevel.foregroundImage = assets.loadImg(`/images/backgrounds/${level.foreground}.png`);
-        this.slingshotImage = assets.loadImg("/images/slingshot.png");
-        this.slingshotFrontImage = assets.loadImg("/images/slingshot-front.png");
+        this._currentLevel.backgroundImage = assets.loadImg(`/images/backgrounds/${level.background}.png`);
+        this._currentLevel.foregroundImage = assets.loadImg(`/images/backgrounds/${level.foreground}.png`);
+        this._slingshotImage = assets.loadImg("/images/slingshot.png");
+        this._slingshotFrontImage = assets.loadImg("/images/slingshot-front.png");
+    }
+    get currentLevel() {
+        return this._currentLevel;
+    }
+    get slingshotImage() {
+        return this._slingshotImage;
+    }
+    get slingshotFrontImage() {
+        return this._slingshotFrontImage;
     }
 }
 
