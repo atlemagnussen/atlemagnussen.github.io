@@ -1,12 +1,14 @@
 import assets from "./assets.js";
 import levels from "./levels.js";
 import wiz from "./wizard.js";
+import mouse from "./mouse.js";
 
 
 class Game {
     constructor() {
         this.init();
         assets.init();
+        mouse.init();
         this.config = {
             mode: "intro",
             slingshotX: 140,
