@@ -10,9 +10,16 @@ class Game {
         assets.init();
         mouse.init();
         this.config = {
-            mode: "intro",
             slingshotX: 140,
-            slingshotY: 280
+            slingshotY: 280,
+            maxSpeed: 3,
+            minOffset: 0,
+            maxOffset: 300
+        };
+        this.state = {
+            mode: "intro",
+            offsetLeft: 0,
+            score: 0
         };
     }
 
@@ -45,23 +52,64 @@ class Game {
         wiz.hide(this.gameLayerElements);
         wiz.show(this.canvas);
         wiz.show(this.scoreScreen);
-        this.config.offsetLeft = 0;
-        this.config.ended = false;
+        this.state.offsetLeft = 0;
+        this.state.ended = false;
         this.animationFrame = window.requestAnimationFrame(() => {
             this.animate();
         }, this.canvas);
     }
+    panTo(newCenter) {
+        if (Math.abs(newCenter-this.state.offsetLeft-this.canvas.width/4) > 0
+        && this.state.offsetLeft <= this.config.maxOffset
+        && this.state.offsetLeft >= this.config.minOffset) {
+            let deltaX = Math.round((newCenter-this.state.offsetLeft-this.canvas.width/4)/2);
+            if(deltaX && Math.abs(deltaX) > this.config.maxSpeed) {
+                deltaX = this.config.maxSpeed*Math.abs(deltaX)/deltaX;
+            }
+            this.state.offsetLeft += deltaX;
+        } else {
+            return true;
+        }
+        if (this.state.offsetLeft < this.config.minOffset) {
+            this.state.offsetLeft = this.config.minOffset;
+            return true;
+        } else if (this.state.offsetLeft > this.config.maxOffset) {
+            this.state.offsetLeft = this.config.maxOffset;
+            return true;
+        }
+        return false;
+    }
     handlePanning() {
-        this.config.offsetLeft += 1;
+        if (this.state.mode === "intro") {
+            if (this.panTo(700)) {
+                this.state.mode = "load-next-hero";
+            }
+        }
+        if (this.state.mode === "wait-for-firing") {
+            if (mouse.state.dragging) {
+                this.panTo(mouse.state.x + this.state.offsetLeft);
+            } else {
+                this.panTo(this.config.slingshotX);
+            }
+        }
+        if (this.state.mode === "load-next-hero") {
+            console.log("todo load next");
+        }
+        if (this.state.mode === "firing") {
+            this.panTo(this.config.slingshotX);
+        }
+        if (this.state.mode === "fired") {
+            console.log("todo fired");
+        }
     }
     animate() {
         this.handlePanning();
-        this.context.drawImage(this.currentLevel.backgroundImage, this.config.offsetLeft/4, 0, 640, 480, 0, 0, 640, 480);
-        this.context.drawImage(this.currentLevel.foregroundImage, this.config.offsetLeft, 0, 640, 480, 0, 0, 640, 480);
-        this.context.drawImage(levels.slingshotImage, this.config.slingshotX-this.config.offsetLeft, this.config.slingshotY);
-        this.context.drawImage(levels.slingshotFrontImage, this.config.slingshotX-this.config.offsetLeft, this.config.slingshotY);
+        this.context.drawImage(this.currentLevel.backgroundImage, this.state.offsetLeft/4, 0, 640, 480, 0, 0, 640, 480);
+        this.context.drawImage(this.currentLevel.foregroundImage, this.state.offsetLeft, 0, 640, 480, 0, 0, 640, 480);
+        this.context.drawImage(levels.slingshotImage, this.config.slingshotX-this.state.offsetLeft, this.config.slingshotY);
+        this.context.drawImage(levels.slingshotFrontImage, this.config.slingshotX-this.state.offsetLeft, this.config.slingshotY);
 
-        if (!this.config.ended) {
+        if (!this.state.ended) {
             this.animationFrame = window.requestAnimationFrame(() => {
                 this.animate();
             }, this.canvas);

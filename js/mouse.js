@@ -1,6 +1,6 @@
 class Mouse {
     constructor() {
-        this.config = {
+        this._state = {
             "x": 0,
             "y": 0,
             "down": false
@@ -18,21 +18,24 @@ class Mouse {
             left: this.canvas.offsetLeft,
             top: this.canvas.offsetTop
         };
-        this.config.x = e.clientX  - offset.left;
-        this.config.y = e.clientY - offset.top;
-        if (this.config.down) {
-            this.config.dragging = true;
+        this._state.x = e.clientX  - offset.left;
+        this._state.y = e.clientY - offset.top;
+        if (this._state.down) {
+            this._state.dragging = true;
         }
     }
     mousedownhandler(e) {
-        this.config.down = true;
-        this.config.downX = this.config.x;
-        this.config.downY = this.config.y;
+        this._state.down = true;
+        this._state.downX = this._state.x;
+        this._state.downY = this._state.y;
         e.preventDefault();
     }
     mouseuphandler() {
-        this.config.down = false;
-        this.config.dragging = false;
+        this._state.down = false;
+        this._state.dragging = false;
+    }
+    get state() {
+        return this._state;
     }
 }
 
