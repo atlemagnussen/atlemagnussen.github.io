@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="Content-type" content="text/html" />
+        <title>box2d</title>
+    </head>
+    <body>
+        <canvas
+            id="canvas"
+            width="640"
+            height="480"
+            style="border: 1px solid black"
+            >your browser does not support canvas
+        </canvas>
+        <script src="js/Box2d.js"></script>
+        <!-- <script type="module" src="js/box2d.js"></script> -->
+        <script type="module">
+            import box from "/js/box.js";
+            box.init();
+        </script>
+    </body>
+</html>
