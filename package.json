@@ -1,0 +1,20 @@
+{
+    "name": "atlemagnussen.github.io",
+    "version": "1.0.0",
+    "description": "atlemagnussen github page",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/atlemagnussen/atlemagnussen.github.io.git"
+    },
+    "keywords": [
+        "web",
+        "games"
+    ],
+    "author": "atlemagnussen",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/atlemagnussen/atlemagnussen.github.io/issues"
+    },
+    "homepage": "https://github.com/atlemagnussen/atlemagnussen.github.io#readme"
+}
