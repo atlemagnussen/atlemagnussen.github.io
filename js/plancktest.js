@@ -29,13 +29,13 @@ class PlanckTest {
             restitution: 0.8,
             density: 1.0,
         });
-        box.setPosition(Vec2(Math.random() * 11, Math.random() * 11));
+        box.setPosition(Vec2(Math.random() * 11, -200));
         //box.setMassData({
         //mass: 1,
         //center: Vec2(),
         // I: 1,
         //});
-        setTimeout(() => this.createNewBoxEveryNowAndThen(), 100);
+        setTimeout(() => this.createNewBoxEveryNowAndThen(), 5);
     }
     renderer() {
         const dt = 1 / 60;
@@ -79,6 +79,7 @@ class PlanckTest {
     drawEdge(fix) {
         const ctx = this.ctx;
         const shape = fix.getShape();
+        const body = fix.getBody();
         const r = shape.getRadius();
         ctx.strokeStyle = "#0F0";
         ctx.lineWidth = 10;
@@ -90,9 +91,15 @@ class PlanckTest {
     drawCircle(fix) {
         const ctx = this.ctx;
         const shape = fix.getShape();
+        const body = fix.getBody();
+        const isActive = body.isActive();
+        // console.log(`isActive=${isActive}`);
         const r = shape.getRadius();
         const c = shape.getCenter();
-        const pos = fix.getBody().getPosition();
+        const pos = body.getPosition();
+        if (pos.y > this.canvas.height / 2) {
+            this.world.destroyBody(body);
+        }
         ctx.beginPath();
         ctx.arc(pos.x, pos.y, r, 0, 2 * Math.PI, false);
         ctx.fillStyle = "green";
@@ -140,11 +147,11 @@ class PlanckTest {
         const pl = planck;
         const Vec2 = pl.Vec2;
 
-        this.world = pl.World(Vec2(0, 10));
+        this.world = pl.World(Vec2(0, 100));
         // this.createPackOfBoxes();
         this.createNewBoxEveryNowAndThen();
         var bar = this.world.createBody();
-        bar.createFixture(pl.Edge(Vec2(-200, 300), Vec2(200, 300)));
+        bar.createFixture(pl.Edge(Vec2(-200, 200), Vec2(200, 200)));
         // bar.setAngle(-0.25);
         this.lastUpdate = Date.now();
         this.renderer();
