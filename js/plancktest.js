@@ -1,9 +1,41 @@
+const { Vec2, World, Edge, Circle, Box } = planck;
+
 class PlanckTest {
     constructor() {
         this.canvas = document.getElementById("canvas");
+        this.bodies = [];
         if (!this.canvas) {
             throw new Error("missing canvas");
         }
+    }
+    createPackOfBoxes() {
+        for (let i = -2; i <= 2; i++) {
+            for (let j = -2; j <= 2; j++) {
+                let box = this.world.createBody().setDynamic();
+                box.createFixture(Box(5, 5));
+                box.setPosition(Vec2(i * 1, -j * 1 + 200));
+                box.setMassData({
+                    mass: 1,
+                    center: Vec2(),
+                    I: 1,
+                });
+            }
+        }
+    }
+    createNewBoxEveryNowAndThen() {
+        let box = this.world.createBody().setDynamic();
+        box.createFixture(Circle(5, 5), {
+            friction: 0,
+            restitution: 0.8,
+            density: 1.0,
+        });
+        box.setPosition(Vec2(Math.random() * 11, Math.random() * 11));
+        //box.setMassData({
+        //mass: 1,
+        //center: Vec2(),
+        // I: 1,
+        //});
+        setTimeout(() => this.createNewBoxEveryNowAndThen(), 100);
     }
     renderer() {
         const dt = 1 / 60;
@@ -60,8 +92,9 @@ class PlanckTest {
         const shape = fix.getShape();
         const r = shape.getRadius();
         const c = shape.getCenter();
+        const pos = fix.getBody().getPosition();
         ctx.beginPath();
-        ctx.arc(c.x, c.y, r, 0, 2 * Math.PI, false);
+        ctx.arc(pos.x, pos.y, r, 0, 2 * Math.PI, false);
         ctx.fillStyle = "green";
         ctx.fill();
         ctx.lineWidth = 5;
@@ -106,27 +139,14 @@ class PlanckTest {
 
         const pl = planck;
         const Vec2 = pl.Vec2;
-        this.lastUpdate = Date.now();
-        this.world = pl.World(Vec2(0, 10));
-        this.boxes = [];
-        var bar = this.world.createBody();
-        bar.createFixture(pl.Edge(Vec2(-200, 300), Vec2(200, 250)));
-        bar.setAngle(0.2);
 
-        for (let i = -2; i <= 2; i++) {
-            for (let j = -2; j <= 2; j++) {
-                let box = this.world.createBody().setDynamic();
-                box.createFixture(pl.Box(5, 5));
-                box.setPosition(Vec2(i * 1, -j * 1 + 200));
-                box.setMassData({
-                    mass: 1,
-                    center: Vec2(),
-                    I: 1,
-                });
-                this.boxes.push(box);
-            }
-        }
-        console.log(this.boxes.length);
+        this.world = pl.World(Vec2(0, 10));
+        // this.createPackOfBoxes();
+        this.createNewBoxEveryNowAndThen();
+        var bar = this.world.createBody();
+        bar.createFixture(pl.Edge(Vec2(-200, 300), Vec2(200, 300)));
+        // bar.setAngle(-0.25);
+        this.lastUpdate = Date.now();
         this.renderer();
     }
 }
