@@ -432,7 +432,7 @@ class PlanckTest {
 
         const updatePosition = e => {
             if (canMove) {
-                const vector = Vec2(e.movementX * force, -e.movementY * force);
+                const vector = Vec2(e.movementX * force, e.movementY * force);
                 paddle2.applyForce(vector, Vec2(paddle2.getPosition()), true);
             }
         };
