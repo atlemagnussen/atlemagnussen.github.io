@@ -6,10 +6,19 @@ class PlanckTest {
         }
     }
     renderer() {
-        const dt = 1 / 60.0;
+        const dt = 1 / 60;
         const world = this.world;
+        const now = Date.now();
+        var elapsed = now - this.lastUpdate;
+        this.lastUpdate = now;
+        this.ctx.clearRect(
+            -this.canvas.width / 2,
+            -this.canvas.height / 2,
+            this.canvas.width,
+            this.canvas.height
+        );
 
-        world.step(dt);
+        world.step(dt, elapsed / 1000);
         for (var body = world.getBodyList(); body; body = body.getNext()) {
             for (
                 var fixture = body.getFixtureList();
@@ -69,12 +78,13 @@ class PlanckTest {
 
         ctx.fillStyle = "#f00";
         ctx.beginPath();
+        const pos = fix.getBody().getPosition();
         const firstVert = shape.getVertex(0);
-        ctx.moveTo(firstVert.x, firstVert.y);
+        ctx.moveTo(firstVert.x + pos.x, firstVert.y + pos.y);
 
         for (let i = 1; i < numVerts; i++) {
             const vert = shape.getVertex(i);
-            ctx.lineTo(vert.x, vert.y);
+            ctx.lineTo(vert.x + pos.x, vert.y + pos.y);
         }
         ctx.closePath();
         ctx.fill();
@@ -96,26 +106,27 @@ class PlanckTest {
 
         const pl = planck;
         const Vec2 = pl.Vec2;
-
-        this.world = pl.World(Vec2(0, -10));
-
+        this.lastUpdate = Date.now();
+        this.world = pl.World(Vec2(0, 10));
+        this.boxes = [];
         var bar = this.world.createBody();
-        bar.createFixture(pl.Edge(Vec2(-20, 5), Vec2(20, 5)));
+        bar.createFixture(pl.Edge(Vec2(-200, 300), Vec2(200, 250)));
         bar.setAngle(0.2);
 
         for (let i = -2; i <= 2; i++) {
             for (let j = -2; j <= 2; j++) {
                 let box = this.world.createBody().setDynamic();
-                box.createFixture(pl.Box(0.5, 0.5));
-                box.setPosition(Vec2(i * 1, -j * 1 + 20));
+                box.createFixture(pl.Box(5, 5));
+                box.setPosition(Vec2(i * 1, -j * 1 + 200));
                 box.setMassData({
-                    mass: 100,
+                    mass: 1,
                     center: Vec2(),
                     I: 1,
                 });
+                this.boxes.push(box);
             }
         }
-
+        console.log(this.boxes.length);
         this.renderer();
     }
 }
