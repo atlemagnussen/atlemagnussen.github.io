@@ -2,15 +2,11 @@ const { Vec2, World, Edge, Circle, Box } = planck;
 
 class PlanckTest {
     constructor() {
-        this.canvas = document.getElementById("canvas");
         this.objects = [];
-        if (!this.canvas) {
-            throw new Error("missing canvas");
-        }
     }
     setupShapes() {
         this.colors = [
-            "red",
+            "rgba(255, 0, 0, 0.5)",
             "green",
             "blue",
             "purple",
@@ -79,13 +75,19 @@ class PlanckTest {
             this.canvas.width,
             this.canvas.height
         );
+        this.fillCanvasBackground();
+
+        world.step(dt, elapsed / 1000);
+        this.draw();
+        window.requestAnimationFrame(() => this.renderer());
+    }
+    draw() {
         // for (var body = world.getBodyList(); body; body = body.getNext()) {
         //     for (
         //         var fixture = body.getFixtureList();
         //         fixture;
         //         fixture = fixture.getNext()
         //     ) {}
-        world.step(dt, elapsed / 1000);
         for (let i = 0; i < this.objects.length; i++) {
             const object = this.objects[i];
             switch (object.type) {
@@ -103,10 +105,14 @@ class PlanckTest {
                     break;
             }
         }
-        window.requestAnimationFrame(() => this.renderer());
+        this.ctx.drawImage(
+            this.offscreenCanvas,
+            -this.canvas.width / 2,
+            -this.canvas.height / 2
+        );
     }
     drawEdge(o) {
-        const ctx = this.ctx;
+        const ctx = this.offscreenCtx;
         const shape = o.fixture.getShape();
         const r = shape.getRadius();
         ctx.strokeStyle = o.color;
@@ -117,7 +123,7 @@ class PlanckTest {
         ctx.stroke();
     }
     drawCircle(o, i) {
-        const ctx = this.ctx;
+        const ctx = this.offscreenCtx;
         const shape = o.fixture.getShape();
         // const isActive = o.body.isActive();
         // console.log(`isActive=${isActive}`);
@@ -146,7 +152,7 @@ class PlanckTest {
         // ctx.stroke();
     }
     drawPolygon(fix) {
-        const ctx = this.ctx;
+        const ctx = this.offscreenCtx;
         const shape = fix.getShape();
         const r = shape.getRadius();
         const numVerts = shape.m_vertices.length;
@@ -165,37 +171,78 @@ class PlanckTest {
         ctx.closePath();
         ctx.fill();
     }
-    fullScreenCanvas() {
+    initCanvas() {
+        this.canvas = document.getElementById("canvas");
+        this.ctx = this.canvas.getContext("2d");
         this.canvas.width = document.body.clientWidth;
         this.canvas.height = document.body.clientHeight;
-    }
-    fillCanvas() {
-        const ctx = this.canvas.getContext("2d");
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    }
-    main() {
-        this.fullScreenCanvas();
-        this.fillCanvas();
-        this.ctx = this.canvas.getContext("2d");
         this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
-
-        const pl = planck;
-
-        this.world = pl.World(Vec2(0, 100));
-        // this.createPackOfBoxes();
-        this.setupShapes();
-        this.createNewObjectEveryNowAndThen();
+    }
+    fillCanvasBackground() {
+        this.offscreenCtx.fillStyle = "black";
+        this.offscreenCtx.fillRect(
+            -this.canvas.width / 2,
+            -this.canvas.height / 2,
+            this.canvas.width,
+            this.canvas.height
+        );
+    }
+    createOffScreenCanvas() {
+        this.offscreenCanvas = document.createElement("canvas");
+        this.offscreenCanvas.width = this.canvas.width;
+        this.offscreenCanvas.height = this.canvas.height;
+        this.offscreenCtx = this.offscreenCanvas.getContext("2d");
+        this.offscreenCtx.translate(
+            this.canvas.width / 2,
+            this.canvas.height / 2
+        );
+    }
+    createBottom() {
         const body = this.world.createBody();
         const fixture = body.createFixture(
-            pl.Edge(Vec2(-200, 200), Vec2(200, 200))
+            Edge(Vec2(-200, 200), Vec2(200, 200))
         );
         this.objects.push({
             type: "edge",
-            color: "black",
+            color: "white",
             fixture,
             body,
         });
+    }
+    createLeft() {
+        const body = this.world.createBody();
+        const fixture = body.createFixture(
+            Edge(Vec2(-200, 200), Vec2(-200, 0))
+        );
+        this.objects.push({
+            type: "edge",
+            color: "white",
+            fixture,
+            body,
+        });
+    }
+    createRight() {
+        const body = this.world.createBody();
+        const fixture = body.createFixture(Edge(Vec2(200, 200), Vec2(200, 0)));
+        this.objects.push({
+            type: "edge",
+            color: "white",
+            fixture,
+            body,
+        });
+    }
+    main() {
+        this.initCanvas();
+        this.createOffScreenCanvas();
+        this.fillCanvasBackground();
+
+        this.world = World(Vec2(0, 100));
+        // this.createPackOfBoxes();
+        this.setupShapes();
+        this.createNewObjectEveryNowAndThen();
+        this.createBottom();
+        this.createLeft();
+        this.createRight();
         // bar.setAngle(-0.25);
 
         this.lastUpdate = Date.now();
