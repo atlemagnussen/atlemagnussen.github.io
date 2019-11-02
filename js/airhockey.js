@@ -516,12 +516,7 @@ class PlanckTest {
                 pad.applyForce(vector, Vec2(pad.getPosition()), true);
                 this.activePadStartVec = Vec2(pos.x, pos.y);
             }
-        };
-        const updateTouch = e => {
-            const pos1 = paddle1.getPosition();
-            const pos2 = paddle2.getPosition();
-            //console.log(paddle1);
-            //console.log(paddle2);
+            e.preventDefault();
         };
 
         //const unlock = () => { this.canMove = document.pointerLockElement === document.body ? true : false; };
