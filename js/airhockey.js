@@ -353,15 +353,16 @@ class PlanckTest {
             this.canvas.width / 2,
             this.canvas.height / 2
         );
-        this.offscreenCtx.scale(15, 15);
+        this.offscreenCtx.scale(this.scale, this.scale);
     }
     main() {
+        this.scale = 15;
+        this.canMove = false;
+        this.force = 100;
         this.initCanvas();
         this.createOffScreenCanvas();
         this.fillCanvasBackground();
 
-        this.canMove = false;
-        this.force = 100;
         this.world = World();
         const table = this.world.createBody();
         const tableMap = this.buildTableMap();
@@ -449,25 +450,49 @@ class PlanckTest {
 
         const updatePosition = e => {
             if (this.activePad) {
-                const vector = Vec2(e.movementX * this.force, e.movementY * this.force);
+                const vector = Vec2(
+                    e.movementX * this.force,
+                    e.movementY * this.force
+                );
                 let pad = paddle1;
-                if (this.activePad == "pad2")
-                    pad = paddle2;
-                
+                if (this.activePad == "pad2") pad = paddle2;
+
                 pad.applyForce(vector, Vec2(paddle2.getPosition()), true);
             }
         };
-        const checkPaddle = (e) => {
-            //console.log(e.clientX);
-            //console.log(e.clientY);
-            if (e.clientY > (this.canvas.height / 2)) {
-                this.activePad = "pad1";
-            } else {
-                this.activePad = "pad2";
-            }
+        const scaleVec = vec => {
+            return Vec2(vec.x * this.scale, vec.y * this.scale);
         };
 
-        const updateTouch = (e) => {
+        const isPaddleInside = (pos, r, e) => {
+            const x = e.clientX - this.canvas.width / 2;
+            const y = e.clientY - this.canvas.height / 2;
+            const y1 = y > pos.y - r;
+            const y2 = y < pos.y + r;
+            const x1 = x > pos.x - r;
+            const x2 = x < pos.x + r;
+            return y1 && y2 && x1 && x2;
+        };
+        const checkPaddle = e => {
+            const pos1 = scaleVec(paddle1.getPosition());
+            const pos2 = scaleVec(paddle2.getPosition());
+            const radius =
+                paddle1
+                    .getFixtureList()
+                    .getShape()
+                    .getRadius() * this.scale;
+            if (isPaddleInside(pos1, radius, e)) {
+                this.activePad = "pad1";
+            } else if (isPaddleInside(pos2, radius, e)) {
+                this.activePad = "pad2";
+            } else {
+                this.activePad = null;
+            }
+        };
+        const releasePaddle = () => {
+            this.activePad = null;
+        };
+        const updateTouch = e => {
             const pos1 = paddle1.getPosition();
             const pos2 = paddle2.getPosition();
             //console.log(paddle1);
@@ -477,8 +502,16 @@ class PlanckTest {
 
         //document.addEventListener("pointerlockchange", () => unlock());
         document.addEventListener("mousedown", e => checkPaddle(e));
+        document.addEventListener("touchstart", e => checkPaddle(e));
+
         window.addEventListener("mousemove", e => updatePosition(e));
-        document.addEventListener("touchmove", e => updateTouch(e));
+        document.addEventListener("touchmove", e => updatePosition(e));
+
+        document.addEventListener("mouseup", e => releasePaddle(e));
+        document.addEventListener("mouseout", e => releasePaddle(e));
+
+        document.addEventListener("touchend", e => releasePaddle(e));
+        document.addEventListener("touchcancel", e => releasePaddle(e));
         //document.body.addEventListener("click", () =>
         //    document.body.requestPointerLock()
         //);
