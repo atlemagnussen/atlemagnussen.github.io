@@ -1,4 +1,4 @@
-const { Vec2, World, Edge, Circle, Box } = planck;
+const { Vec2, World, Edge, Circle } = planck;
 
 class PlanckTest {
     constructor() {
@@ -283,7 +283,7 @@ class PlanckTest {
     drawEdge(o) {
         const ctx = this.offscreenCtx;
         const shape = o.fixture.getShape();
-        const r = shape.getRadius();
+        //const r = shape.getRadius();
         ctx.strokeStyle = o.color;
         ctx.lineWidth = 0.1;
         ctx.beginPath();
@@ -310,7 +310,7 @@ class PlanckTest {
     drawPolygon(fix) {
         const ctx = this.offscreenCtx;
         const shape = fix.getShape();
-        const r = shape.getRadius();
+        //const r = shape.getRadius();
         const numVerts = shape.m_vertices.length;
         if (numVerts === 0) throw new Error("No verticies?");
 
@@ -360,8 +360,8 @@ class PlanckTest {
         this.createOffScreenCanvas();
         this.fillCanvasBackground();
 
-        let canMove = false;
-        const force = 100;
+        this.canMove = false;
+        this.force = 100;
         this.world = World();
         const table = this.world.createBody();
         const tableMap = this.buildTableMap();
@@ -395,6 +395,24 @@ class PlanckTest {
             filterMaskBits: 0x0002,
         });
 
+        this.createPuckAndPaddles();
+        this.world.on("begin-contact", e => this.handleContact(e));
+
+        this.renderer();
+    }
+    handleContact(contact) {
+        const fixtureA = contact.getFixtureA();
+        //const fixtureB = contact.getFixtureB();
+        if (fixtureA == this.goal1Sensor) {
+            this.alertGoal("player1");
+            this.world.destroyBody(this.puck);
+        }
+        if (fixtureA == this.goal2Sensor) {
+            this.alertGoal("player2");
+            this.world.destroyBody(this.puck);
+        }
+    }
+    createPuckAndPaddles() {
         this.puck = this.world.createBody({
             type: "dynamic",
             position: Vec2(0, 0),
@@ -430,37 +448,40 @@ class PlanckTest {
         paddle2.createFixture(Circle(1.5), paddleFixtureDefinition);
 
         const updatePosition = e => {
-            if (canMove) {
-                const vector = Vec2(e.movementX * force, e.movementY * force);
-                paddle2.applyForce(vector, Vec2(paddle2.getPosition()), true);
+            if (this.activePad) {
+                const vector = Vec2(e.movementX * this.force, e.movementY * this.force);
+                let pad = paddle1;
+                if (this.activePad == "pad2")
+                    pad = paddle2;
+                
+                pad.applyForce(vector, Vec2(paddle2.getPosition()), true);
+            }
+        };
+        const checkPaddle = (e) => {
+            //console.log(e.clientX);
+            //console.log(e.clientY);
+            if (e.clientY > (this.canvas.height / 2)) {
+                this.activePad = "pad1";
+            } else {
+                this.activePad = "pad2";
             }
         };
 
-        const unlock = () => {
-            canMove =
-                document.pointerLockElement === document.body ? true : false;
+        const updateTouch = (e) => {
+            const pos1 = paddle1.getPosition();
+            const pos2 = paddle2.getPosition();
+            //console.log(paddle1);
+            //console.log(paddle2);
         };
+        //const unlock = () => { this.canMove = document.pointerLockElement === document.body ? true : false; };
 
-        document.addEventListener("pointerlockchange", () => unlock());
+        //document.addEventListener("pointerlockchange", () => unlock());
+        document.addEventListener("mousedown", e => checkPaddle(e));
         window.addEventListener("mousemove", e => updatePosition(e));
-        document.body.addEventListener("click", () =>
-            document.body.requestPointerLock()
-        );
-        this.world.on("begin-contact", e => this.handleContact(e));
-
-        this.renderer();
-    }
-    handleContact(contact) {
-        const fixtureA = contact.getFixtureA();
-        const fixtureB = contact.getFixtureB();
-        if (fixtureA == this.goal1Sensor) {
-            this.alertGoal("player1");
-            this.world.destroyBody(this.puck);
-        }
-        if (fixtureA == this.goal2Sensor) {
-            this.alertGoal("player2");
-            this.world.destroyBody(this.puck);
-        }
+        document.addEventListener("touchmove", e => updateTouch(e));
+        //document.body.addEventListener("click", () =>
+        //    document.body.requestPointerLock()
+        //);
     }
     alertGoal(scorer) {
         const txt = `${scorer} scored!`;
