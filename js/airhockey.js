@@ -291,7 +291,7 @@ class PlanckTest {
         ctx.lineTo(shape.m_vertex2.x, shape.m_vertex2.y);
         ctx.stroke();
     }
-    drawCircle(o, i) {
+    drawCircle(o) {
         const ctx = this.offscreenCtx;
         const shape = o.fixture.getShape();
         // const isActive = o.body.isActive();
@@ -362,7 +362,6 @@ class PlanckTest {
 
         let canMove = false;
         const force = 100;
-        const pl = planck;
         this.world = World();
         const table = this.world.createBody();
         const tableMap = this.buildTableMap();
@@ -466,6 +465,18 @@ class PlanckTest {
     alertGoal(scorer) {
         const txt = `${scorer} scored!`;
         console.log(txt);
+        const ctx = this.offscreenCtx;
+        ctx.font = "30px Comic Sans MS";
+        ctx.fillStyle = "red";
+        ctx.textAlign = "center";
+        ctx.fillText(
+            "Hello World",
+            this.canvas.width / 2,
+            this.canvas.height / 2
+        );
+        this.ctx.font = "30px Arial";
+        this.ctx.fillStyle = "red";
+        this.ctx.fillText(txt, 10, 50);
     }
 }
 
