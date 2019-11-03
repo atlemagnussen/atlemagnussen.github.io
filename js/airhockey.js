@@ -536,6 +536,21 @@ class PlanckTest {
         //document.body.addEventListener("click", () =>
         //    document.body.requestPointerLock()
         //);
+        window.addEventListener("resize", e => this.resizeCanvas(e));
+        this.canvas.addEventListener("dblclick", (e) => this.fullscreen(e));
+    }
+    resizeCanvas() {
+        this.canvas.width = document.body.clientWidth;
+        this.canvas.height = document.body.clientHeight;
+        this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
+        this.offscreenCanvas.width = this.canvas.width;
+        this.offscreenCanvas.height = this.canvas.height;
+        this.offscreenCtx = this.offscreenCanvas.getContext("2d");
+        this.offscreenCtx.translate(
+            this.canvas.width / 2,
+            this.canvas.height / 2
+        );
+        this.offscreenCtx.scale(this.scale, this.scale);
     }
     alertGoal(scorer) {
         const txt = `${scorer} scored!`;
@@ -552,6 +567,21 @@ class PlanckTest {
         this.ctx.font = "30px Arial";
         this.ctx.fillStyle = "red";
         this.ctx.fillText(txt, 10, 50);
+    }
+    fullscreen() {
+        const elem = this.canvas;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+            /* Firefox */
+            elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) {
+            /* Chrome, Safari and Opera */
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) {
+            /* IE/Edge */
+            elem.msRequestFullscreen();
+        }
     }
 }
 
