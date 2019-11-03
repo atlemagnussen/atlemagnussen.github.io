@@ -1,9 +1,38 @@
 class Draw {
-    constructor(ctx) {
-        this.ctx = ctx;
+    all(world) {
+        for (var body = world.getBodyList(); body; body = body.getNext()) {
+            for (var fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
+                const type = fixture.getType();
+                const object = {
+                    type,
+                    body,
+                    fixture,
+                    color: "white",
+                };
+                this.draw(this.offscreenCtx, object);
+            }
+        }
     }
-    edge(o) {
-        const ctx = this.ctx;
+    draw(ctx, o) {
+        switch (o.type) {
+            case "edge":
+                this.edge(ctx, o);
+                break;
+            case "circle":
+                this.circle(ctx, o);
+                break;
+            case "polygon":
+                this.polygon(ctx, o);
+                break;
+            case "text":
+                this.text(ctx, o);
+                break;
+            default:
+                console.log(o.type);
+                break;
+        }
+    }
+    edge(ctx, o) {
         const shape = o.fixture.getShape();
         //const r = shape.getRadius();
         ctx.strokeStyle = o.color;
@@ -13,8 +42,7 @@ class Draw {
         ctx.lineTo(shape.m_vertex2.x, shape.m_vertex2.y);
         ctx.stroke();
     }
-    circle(o) {
-        const ctx = this.ctx;
+    circle(ctx, o) {
         const shape = o.fixture.getShape();
         // const isActive = o.body.isActive();
         // console.log(`isActive=${isActive}`);
@@ -32,8 +60,7 @@ class Draw {
         }
         ctx.stroke();
     }
-    polygon(fix) {
-        const ctx = this.ctx;
+    polygon(ctx, fix) {
         const shape = fix.getShape();
         //const r = shape.getRadius();
         const numVerts = shape.m_vertices.length;
@@ -52,13 +79,13 @@ class Draw {
         ctx.closePath();
         ctx.fill();
     }
-    text(o) {
-        const ctx = this.ctx;
+    text(ctx, o) {
         if (o.visible) {
-            ctx.font = "20px Georgia";
+            ctx.font = "2px Georgia";
+            ctx.fillStyle = o.color ? o.color : "red";
             ctx.fillText(o.text, o.pos.x, o.pos.y);
         }
     }
 }
 
-export default Draw;
+export default new Draw();

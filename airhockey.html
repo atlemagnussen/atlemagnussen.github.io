@@ -4,14 +4,16 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="Content-type" content="text/html" />
-        <title>foosball planck</title>
-        <link rel="stylesheet" href="css/planck.css" />
+        <title>airhockey with planck and canvas juggling</title>
+        <link rel="stylesheet" href="air/style.css" />
     </head>
     <body>
-        <canvas id="canvas">your browser does not support canvas</canvas>
+        <canvas id="ui">your browser does not support canvas</canvas>
+        <canvas id="game">your browser does not support canvas</canvas>
+        <canvas id="background">your browser does not support canvas</canvas>
         <script src="https://cdn.jsdelivr.net/npm/planck-js@0.3.3/dist/planck-with-testbed.js"></script>
         <script type="module">
-            import t from "/js/air/airhockey.js";
+            import t from "/air/airhockey.js";
             t.main();
         </script>
     </body>
