@@ -1,3 +1,5 @@
+import field from "./field.js";
+
 const { Vec2, World, Edge, Circle } = planck;
 
 class PlanckTest {
@@ -6,224 +8,8 @@ class PlanckTest {
         if (!this.canvas) {
             throw new Error("missing canvas");
         }
-    }
-    buildTableMap() {
-        let tableMap = [];
-        const tableHeight = 42;
-        const tableWidth = 24;
-        const goalWidth = 8;
-        const goalDepth = 3;
-        const cornerRadius = 3;
-        const cornerSteps = 5;
-        const endLength = (tableWidth - goalWidth - cornerRadius * 2) / 2;
-        // const sideLength = (tableHeight - cornerRadius * 2) / 2;
-        const centerX = tableWidth / 2;
-        const centerY = tableHeight / 2;
-
-        tableMap.push([
-            {
-                x: -(goalWidth / 2),
-                y: centerY,
-            },
-            {
-                x: -(goalWidth / 2) - endLength,
-                y: centerY,
-            },
-        ]);
-
-        tableMap.push([
-            {
-                x: goalWidth / 2,
-                y: centerY,
-            },
-            {
-                x: goalWidth / 2 + endLength,
-                y: centerY,
-            },
-        ]);
-
-        tableMap.push([
-            {
-                x: -(goalWidth / 2),
-                y: centerY + goalDepth,
-            },
-            {
-                x: goalWidth / 2,
-                y: centerY + goalDepth,
-            },
-        ]);
-
-        tableMap.push([
-            {
-                x: -(goalWidth / 2),
-                y: centerY + goalDepth,
-            },
-            {
-                x: -(goalWidth / 2),
-                y: centerY,
-            },
-        ]);
-
-        tableMap.push([
-            {
-                x: goalWidth / 2,
-                y: centerY + goalDepth,
-            },
-            {
-                x: goalWidth / 2,
-                y: centerY,
-            },
-        ]);
-
-        tableMap.push([
-            {
-                x: centerX,
-                y: centerY - cornerRadius,
-            },
-            {
-                x: centerX,
-                y: -centerY + cornerRadius,
-            },
-        ]);
-
-        tableMap.push([
-            {
-                x: -centerX,
-                y: centerY - cornerRadius,
-            },
-            {
-                x: -centerX,
-                y: -centerY + cornerRadius,
-            },
-        ]);
-
-        tableMap.push([
-            {
-                x: -(goalWidth / 2),
-                y: -centerY,
-            },
-            {
-                x: -(goalWidth / 2) - endLength,
-                y: -centerY,
-            },
-        ]);
-
-        tableMap.push([
-            {
-                x: goalWidth / 2,
-                y: -centerY,
-            },
-            {
-                x: goalWidth / 2 + endLength,
-                y: -centerY,
-            },
-        ]);
-
-        tableMap.push([
-            {
-                x: -(goalWidth / 2),
-                y: -centerY - goalDepth,
-            },
-            {
-                x: goalWidth / 2,
-                y: -centerY - goalDepth,
-            },
-        ]);
-
-        tableMap.push([
-            {
-                x: -(goalWidth / 2),
-                y: -centerY - goalDepth,
-            },
-            {
-                x: -(goalWidth / 2),
-                y: -centerY,
-            },
-        ]);
-
-        tableMap.push([
-            {
-                x: goalWidth / 2,
-                y: -centerY - goalDepth,
-            },
-            {
-                x: goalWidth / 2,
-                y: -centerY,
-            },
-        ]);
-
-        createCorner(
-            {
-                x: centerX,
-                y: centerY,
-            },
-            {
-                x: centerX - cornerRadius,
-                y: centerY - cornerRadius,
-            }
-        );
-
-        createCorner(
-            {
-                x: -centerX,
-                y: centerY,
-            },
-            {
-                x: -centerX + cornerRadius,
-                y: centerY - cornerRadius,
-            }
-        );
-
-        createCorner(
-            {
-                x: centerX,
-                y: -centerY,
-            },
-            {
-                x: centerX - cornerRadius,
-                y: -centerY + cornerRadius,
-            }
-        );
-
-        createCorner(
-            {
-                x: -centerX,
-                y: -centerY,
-            },
-            {
-                x: -centerX + cornerRadius,
-                y: -centerY + cornerRadius,
-            }
-        );
-
-        function createCorner(start, end) {
-            let sum = 0;
-            let map = [];
-            const sizeX = end.x - start.x;
-            const sizeY = end.y - start.y;
-
-            for (let i = 0; i < cornerSteps + 1; i++) {
-                sum += i;
-                map.push(sum);
-            }
-
-            function stepWidth(index, size) {
-                return (size / map[cornerSteps]) * map[index];
-            }
-
-            for (let i = 0; i < cornerSteps; i++) {
-                const currentX = stepWidth(i, sizeX) + start.x;
-                const currentY = stepWidth(cornerSteps - i, sizeY) + start.y;
-                const nextX = stepWidth(i + 1, sizeX) + start.x;
-                const nextY = stepWidth(cornerSteps - i - 1, sizeY) + start.y;
-                tableMap.push([
-                    { x: currentX, y: currentY },
-                    { x: nextX, y: nextY },
-                ]);
-            }
-        }
-
-        return tableMap;
+        this.staticObjects = [];
+        this.dynamicObjects = [];
     }
     renderer() {
         const dt = 1 / 60;
@@ -267,6 +53,9 @@ class PlanckTest {
                     case "polygon":
                         this.drawPolygon(object);
                         break;
+                    case "text":
+                        this.drawText(object);
+                        break;
                     default:
                         console.log(object.type);
                         break;
@@ -299,12 +88,15 @@ class PlanckTest {
         const r = shape.getRadius();
         // const c = shape.getCenter();
         const pos = o.body.getPosition();
-
         ctx.beginPath();
         ctx.arc(pos.x, pos.y, r, 0, 2 * Math.PI, false);
         ctx.lineWidth = 0.2;
         ctx.strokeStyle = "green";
-        ctx.closePath();
+        if (o.body.selected) {
+            ctx.fillStyle = "darkcyan";
+            ctx.strokeStyle = "cyan";
+            ctx.fill();
+        }
         ctx.stroke();
     }
     drawPolygon(fix) {
@@ -327,13 +119,19 @@ class PlanckTest {
         ctx.closePath();
         ctx.fill();
     }
+    drawText(o) {
+        const ctx = this.offscreenCtx;
+        if (o.visible) {
+            ctx.font = "20px Georgia";
+            ctx.fillText(o.text, o.pos.x, o.pos.y);
+        }
+    }
     initCanvas() {
         this.canvas = document.getElementById("canvas");
         this.ctx = this.canvas.getContext("2d");
         this.canvas.width = document.body.clientWidth;
         this.canvas.height = document.body.clientHeight;
         this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
-        // this.ctx.scale(15, 15);
     }
     fillCanvasBackground() {
         this.offscreenCtx.fillStyle = "black";
@@ -364,14 +162,24 @@ class PlanckTest {
         this.fillCanvasBackground();
 
         this.world = World();
+        this.createField();
+
+        this.renderer();
+    }
+    createField() {
         const table = this.world.createBody();
-        const tableMap = this.buildTableMap();
+        const tableMap = field.buildTableMap();
 
         //Create Table Walls
-        tableMap.map(function(edge) {
-            table.createFixture(
+        tableMap.map(edge => {
+            const fixture = table.createFixture(
                 Edge(Vec2(edge[0].x, edge[0].y), Vec2(edge[1].x, edge[1].y))
             );
+            // this.staticObjects.push({
+            //     type: "edge",
+            //     body: table,
+            //     fixture,
+            // });
         });
 
         //Create Goal Detection Sensors
@@ -380,11 +188,20 @@ class PlanckTest {
             Edge(Vec2(-4, 22.5), Vec2(4, 22.5)),
             goalFixureDefinition
         );
+        // this.staticObjects.push({
+        //     type: "edge",
+        //     body: table,
+        //     fixture: this.goal1Sensor,
+        // });
         this.goal2Sensor = table.createFixture(
             Edge(Vec2(-4, -22.5), Vec2(4, -22.5)),
             goalFixureDefinition
         );
-
+        // this.staticObjects.push({
+        //     type: "edge",
+        //     body: table,
+        //     fixture: this.goal2Sensor,
+        // });
         //Create Paddle Blocking Walls
         table.createFixture(Edge(Vec2(-4, 21), Vec2(4, 21)), {
             filterMaskBits: 0x0002,
@@ -398,8 +215,6 @@ class PlanckTest {
 
         this.createPuckAndPaddles();
         this.world.on("begin-contact", e => this.handleContact(e));
-
-        this.renderer();
     }
     handleContact(contact) {
         const fixtureA = contact.getFixtureA();
@@ -454,10 +269,12 @@ class PlanckTest {
                     e.movementX * this.force,
                     e.movementY * this.force
                 );
-                let pad = paddle1;
-                if (this.activePad == "pad2") pad = paddle2;
 
-                pad.applyForce(vector, Vec2(pad.getPosition()), true);
+                this.activePad.applyForce(
+                    vector,
+                    Vec2(this.activePad.getPosition()),
+                    true
+                );
             }
         };
         const scaleVec = vec => {
@@ -484,10 +301,12 @@ class PlanckTest {
                     .getShape()
                     .getRadius() * this.scale;
             if (isPaddleInside(pos1, radius, e)) {
-                this.activePad = "pad1";
+                this.activePad = paddle1;
+                this.activePad.selected = true;
                 this.activePadStartVec = getMouseTouchPos(e);
             } else if (isPaddleInside(pos2, radius, e)) {
-                this.activePad = "pad2";
+                this.activePad = paddle2;
+                this.activePad.selected = true;
                 this.activePadStartVec = getMouseTouchPos(e);
             } else {
                 this.activePad = null;
@@ -500,20 +319,23 @@ class PlanckTest {
             return Vec2(x, y);
         };
         const releasePaddle = () => {
+            if (this.activePad) {
+                this.activePad.selected = false;
+            }
             this.activePad = null;
         };
         const touchMove = e => {
             if (this.activePad) {
-                let pad = paddle1;
-                if (this.activePad === "pad2") {
-                    pad = paddle2;
-                }
                 const pos = getMouseTouchPos(e);
                 const vector = Vec2(
                     -(this.activePadStartVec.x - pos.x) * this.force,
                     -(this.activePadStartVec.y - pos.y) * this.force
                 );
-                pad.applyForce(vector, Vec2(pad.getPosition()), true);
+                this.activePad.applyForce(
+                    vector,
+                    Vec2(this.activePad.getPosition()),
+                    true
+                );
                 this.activePadStartVec = Vec2(pos.x, pos.y);
             }
             e.preventDefault();
@@ -537,7 +359,7 @@ class PlanckTest {
         //    document.body.requestPointerLock()
         //);
         window.addEventListener("resize", e => this.resizeCanvas(e));
-        this.canvas.addEventListener("dblclick", (e) => this.fullscreen(e));
+        this.canvas.addEventListener("dblclick", e => this.fullscreen(e));
     }
     resizeCanvas() {
         this.canvas.width = document.body.clientWidth;
