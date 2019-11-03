@@ -1,4 +1,5 @@
 import field from "./field.js";
+import Draw from "./draw.js";
 
 const { Vec2, World, Edge, Circle } = planck;
 
@@ -26,10 +27,10 @@ class PlanckTest {
         this.fillCanvasBackground();
 
         world.step(dt, elapsed / 1000);
-        this.draw();
+        this.drawDynamic();
         window.requestAnimationFrame(() => this.renderer());
     }
-    draw() {
+    drawDynamic() {
         for (var body = this.world.getBodyList(); body; body = body.getNext()) {
             for (
                 var fixture = body.getFixtureList();
@@ -45,16 +46,16 @@ class PlanckTest {
                 };
                 switch (object.type) {
                     case "edge":
-                        this.drawEdge(object);
+                        this.draw.edge(object);
                         break;
                     case "circle":
-                        this.drawCircle(object);
+                        this.draw.circle(object);
                         break;
                     case "polygon":
-                        this.drawPolygon(object);
+                        this.draw.polygon(object);
                         break;
                     case "text":
-                        this.drawText(object);
+                        this.draw.text(object);
                         break;
                     default:
                         console.log(object.type);
@@ -69,63 +70,7 @@ class PlanckTest {
             -this.canvas.height / 2
         );
     }
-    drawEdge(o) {
-        const ctx = this.offscreenCtx;
-        const shape = o.fixture.getShape();
-        //const r = shape.getRadius();
-        ctx.strokeStyle = o.color;
-        ctx.lineWidth = 0.1;
-        ctx.beginPath();
-        ctx.moveTo(shape.m_vertex1.x, shape.m_vertex1.y);
-        ctx.lineTo(shape.m_vertex2.x, shape.m_vertex2.y);
-        ctx.stroke();
-    }
-    drawCircle(o) {
-        const ctx = this.offscreenCtx;
-        const shape = o.fixture.getShape();
-        // const isActive = o.body.isActive();
-        // console.log(`isActive=${isActive}`);
-        const r = shape.getRadius();
-        // const c = shape.getCenter();
-        const pos = o.body.getPosition();
-        ctx.beginPath();
-        ctx.arc(pos.x, pos.y, r, 0, 2 * Math.PI, false);
-        ctx.lineWidth = 0.2;
-        ctx.strokeStyle = "green";
-        if (o.body.selected) {
-            ctx.fillStyle = "darkcyan";
-            ctx.strokeStyle = "cyan";
-            ctx.fill();
-        }
-        ctx.stroke();
-    }
-    drawPolygon(fix) {
-        const ctx = this.offscreenCtx;
-        const shape = fix.getShape();
-        //const r = shape.getRadius();
-        const numVerts = shape.m_vertices.length;
-        if (numVerts === 0) throw new Error("No verticies?");
-
-        ctx.fillStyle = "#f00";
-        ctx.beginPath();
-        const pos = fix.getBody().getPosition();
-        const firstVert = shape.getVertex(0);
-        ctx.moveTo(firstVert.x + pos.x, firstVert.y + pos.y);
-
-        for (let i = 1; i < numVerts; i++) {
-            const vert = shape.getVertex(i);
-            ctx.lineTo(vert.x + pos.x, vert.y + pos.y);
-        }
-        ctx.closePath();
-        ctx.fill();
-    }
-    drawText(o) {
-        const ctx = this.offscreenCtx;
-        if (o.visible) {
-            ctx.font = "20px Georgia";
-            ctx.fillText(o.text, o.pos.x, o.pos.y);
-        }
-    }
+    
     initCanvas() {
         this.canvas = document.getElementById("canvas");
         this.ctx = this.canvas.getContext("2d");
@@ -160,7 +105,7 @@ class PlanckTest {
         this.initCanvas();
         this.createOffScreenCanvas();
         this.fillCanvasBackground();
-
+        this.draw = new Draw(this.offscreenCtx);
         this.world = World();
         this.createField();
 
