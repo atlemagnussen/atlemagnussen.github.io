@@ -118,7 +118,7 @@ class PlanckTest {
         //Create Table Walls
         tableMap.map(edge => {
             const fixture = table.createFixture(
-                Edge(Vec2(edge[0].x, edge[0].y), Vec2(edge[1].x, edge[1].y))
+                Edge(Vec2(edge.from.x, edge.from.y), Vec2(edge.to.x, edge.to.y))
             );
             // this.staticObjects.push({
             //     type: "edge",

@@ -36,143 +36,33 @@ class Field {
                 const nextX = stepWidth(i + 1, sizeX) + start.x;
                 const nextY =
                     stepWidth(this.cornerSteps - i - 1, sizeY) + start.y;
-                tableMap.push([
-                    { x: currentX, y: currentY },
-                    { x: nextX, y: nextY },
-                ]);
+                tableMap.push(this.fromToVec(currentX, currentY, nextX, nextY));
+                
             }
         };
-        tableMap.push([
-            {
-                x: -(goalWidth / 2),
-                y: centerY,
-            },
-            {
-                x: -(goalWidth / 2) - endLength,
-                y: centerY,
-            },
-        ]);
+        tableMap.push(this.fromToVec(-(goalWidth / 2), centerY, -(goalWidth / 2) - endLength, centerY));
 
-        tableMap.push([
-            {
-                x: goalWidth / 2,
-                y: centerY,
-            },
-            {
-                x: goalWidth / 2 + endLength,
-                y: centerY,
-            },
-        ]);
+        tableMap.push(this.fromToVec(goalWidth / 2, centerY, goalWidth / 2 + endLength, centerY));
 
-        tableMap.push([
-            {
-                x: -(goalWidth / 2),
-                y: centerY + goalDepth,
-            },
-            {
-                x: goalWidth / 2,
-                y: centerY + goalDepth,
-            },
-        ]);
+        tableMap.push(this.fromToVec(-(goalWidth / 2), centerY + goalDepth, goalWidth / 2, centerY + goalDepth));
 
-        tableMap.push([
-            {
-                x: -(goalWidth / 2),
-                y: centerY + goalDepth,
-            },
-            {
-                x: -(goalWidth / 2),
-                y: centerY,
-            },
-        ]);
+        tableMap.push(this.fromToVec(-(goalWidth / 2), centerY + goalDepth, -(goalWidth / 2), centerY));
 
-        tableMap.push([
-            {
-                x: goalWidth / 2,
-                y: centerY + goalDepth,
-            },
-            {
-                x: goalWidth / 2,
-                y: centerY,
-            },
-        ]);
+        tableMap.push(this.fromToVec(goalWidth / 2, centerY + goalDepth, goalWidth / 2, centerY));
 
-        tableMap.push([
-            {
-                x: centerX,
-                y: centerY - cornerRadius,
-            },
-            {
-                x: centerX,
-                y: -centerY + cornerRadius,
-            },
-        ]);
+        tableMap.push(this.fromToVec(centerX, centerY - cornerRadius, centerX,-centerY + cornerRadius));
 
-        tableMap.push([
-            {
-                x: -centerX,
-                y: centerY - cornerRadius,
-            },
-            {
-                x: -centerX,
-                y: -centerY + cornerRadius,
-            },
-        ]);
+        tableMap.push(this.fromToVec(-centerX, centerY - cornerRadius,-centerX,-centerY + cornerRadius));
 
-        tableMap.push([
-            {
-                x: -(goalWidth / 2),
-                y: -centerY,
-            },
-            {
-                x: -(goalWidth / 2) - endLength,
-                y: -centerY,
-            },
-        ]);
+        tableMap.push(this.fromToVec(-(goalWidth / 2),-centerY, -(goalWidth / 2) - endLength,-centerY));
 
-        tableMap.push([
-            {
-                x: goalWidth / 2,
-                y: -centerY,
-            },
-            {
-                x: goalWidth / 2 + endLength,
-                y: -centerY,
-            },
-        ]);
+        tableMap.push(this.fromToVec(goalWidth / 2,-centerY,goalWidth / 2 + endLength,-centerY));
 
-        tableMap.push([
-            {
-                x: -(goalWidth / 2),
-                y: -centerY - goalDepth,
-            },
-            {
-                x: goalWidth / 2,
-                y: -centerY - goalDepth,
-            },
-        ]);
+        tableMap.push(this.fromToVec(-(goalWidth / 2),-centerY - goalDepth,goalWidth / 2,-centerY - goalDepth));
 
-        tableMap.push([
-            {
-                x: -(goalWidth / 2),
-                y: -centerY - goalDepth,
-            },
-            {
-                x: -(goalWidth / 2),
-                y: -centerY,
-            },
-        ]);
+        tableMap.push(this.fromToVec(-(goalWidth / 2),-centerY - goalDepth,-(goalWidth / 2),-centerY));
 
-        tableMap.push([
-            {
-                x: goalWidth / 2,
-                y: -centerY - goalDepth,
-            },
-            {
-                x: goalWidth / 2,
-                y: -centerY,
-            },
-        ]);
+        tableMap.push(this.fromToVec(goalWidth / 2,-centerY - goalDepth,goalWidth / 2,-centerY));
 
         createCorner(
             {
@@ -219,6 +109,18 @@ class Field {
         );
 
         return tableMap;
+    }
+    fromToVec(x1,y1,x2,y2){
+        return {
+            from: {
+                x: x1,
+                y: y1,
+            },
+            to: {
+                x: x2,
+                y: y2,
+            }
+        };
     }
 }
 
