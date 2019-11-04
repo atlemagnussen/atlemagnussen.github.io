@@ -218,18 +218,16 @@ class PlanckTest {
                 this.activePad.applyForce(vector, Vec2(this.activePad.getPosition()), true);
                 this.activePadStartVec = Vec2(pos.x, pos.y);
             }
-            e.preventDefault();
+            e.stopPropagation();
         };
 
         document.body.addEventListener("mousedown", e => checkPaddle(e));
-        document.body.addEventListener("touchstart", e => checkPaddle(e));
-
         window.addEventListener("mousemove", e => updatePosition(e));
-        document.body.addEventListener("touchmove", e => touchMove(e));
-
         document.body.addEventListener("mouseup", e => releasePaddle(e));
         document.body.addEventListener("mouseout", e => releasePaddle(e));
 
+        document.body.addEventListener("touchstart", e => checkPaddle(e));
+        document.body.addEventListener("touchmove", e => touchMove(e));
         document.body.addEventListener("touchend", e => releasePaddle(e));
         document.body.addEventListener("touchcancel", e => releasePaddle(e));
 
