@@ -14,9 +14,9 @@ class Canvas {
         this.staticObjects = [];
     }
     init() {
-        this.resizeCanvas();
+        this.resizeCanvas(true);
         this.scale(this.backgroundCtx);
-        window.addEventListener("resize", e => this.resizeCanvas(e));
+        window.addEventListener("resize", () => this.resizeCanvas());
         this.game.addEventListener("dblclick", e => this.fullscreen(e));
     }
     setSize(ctx, w, h) {
@@ -29,7 +29,7 @@ class Canvas {
     scale(ctx) {
         ctx.scale(config.scale, config.scale);
     }
-    resizeCanvas() {
+    resizeCanvas(init) {
         const w = document.body.clientWidth,
             h = document.body.clientHeight;
         this.setSize(this.background, w, h);
@@ -38,6 +38,10 @@ class Canvas {
         this.center(this.gameCtx, w, h);
         this.setSize(this.ui, w, h);
         this.center(this.uiCtx, w, h);
+        if (!init) {
+            this.scale(this.backgroundCtx);
+            this.setBackground();
+        }
     }
     initBackground(table) {
         const tableMap = field.buildTableMap();
