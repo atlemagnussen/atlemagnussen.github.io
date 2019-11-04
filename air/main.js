@@ -45,7 +45,7 @@ class PlanckTest {
         this.offscreenCtx.translate(w / 2, h / 2);
         this.offscreenCtx.scale(config.scale, config.scale);
     }
-    main() {
+    init() {
         canvas.init();
         this.createOffScreenCanvas();
         this.world = World();
@@ -54,33 +54,25 @@ class PlanckTest {
     }
     createField() {
         const table = this.world.createBody();
-        canvas.initBackground(table);
 
         //Create Goal Detection Sensors
         const goalFixureDefinition = { isSensor: true, filterMaskBits: 0x0004 };
         this.goal1Sensor = table.createFixture(Edge(Vec2(-4, 22.5), Vec2(4, 22.5)), goalFixureDefinition);
-        // this.dynamicObjects.push({
-        //     type: "edge",
-        //     body: table,
-        //     fixture: this.goal1Sensor,
-        // });
         this.goal2Sensor = table.createFixture(Edge(Vec2(-4, -22.5), Vec2(4, -22.5)), goalFixureDefinition);
-        // this.staticObjects.push({
-        //     type: "edge",
-        //     body: table,
-        //     fixture: this.goal2Sensor,
-        // });
+        const statics = [this.goal1Sensor, this.goal2Sensor];
         //Create Paddle Blocking Walls
-        table.createFixture(Edge(Vec2(-4, 21), Vec2(4, 21)), {
+        statics.push(table.createFixture(Edge(Vec2(-4, 21), Vec2(4, 21)), {
             filterMaskBits: 0x0002,
-        });
-        table.createFixture(Edge(Vec2(-4, -21), Vec2(4, -21)), {
+        }));
+        statics.push(table.createFixture(Edge(Vec2(-4, -21), Vec2(4, -21)), {
             filterMaskBits: 0x0002,
-        });
-        table.createFixture(Edge(Vec2(-12, 0), Vec2(12, 0)), {
+        }));
+        statics.push(table.createFixture(Edge(Vec2(-12, 0), Vec2(12, 0)), {
             filterMaskBits: 0x0002,
-        });
+        }));
 
+        
+        canvas.initBackground(table, statics);
         this.createPuck();
         this.createPaddles();
         this.world.on("begin-contact", e => this.handleContact(e));
@@ -226,10 +218,11 @@ class PlanckTest {
         document.body.addEventListener("mouseup", e => releasePaddle(e));
         document.body.addEventListener("mouseout", e => releasePaddle(e));
 
-        document.body.addEventListener("touchstart", e => checkPaddle(e));
-        document.body.addEventListener("touchmove", e => touchMove(e));
-        document.body.addEventListener("touchend", e => releasePaddle(e));
-        document.body.addEventListener("touchcancel", e => releasePaddle(e));
+        const gameEl = canvas.uiCanvas;
+        gameEl.addEventListener("touchstart", e => checkPaddle(e));
+        gameEl.addEventListener("touchmove", e => touchMove(e));
+        gameEl.addEventListener("touchend", e => releasePaddle(e));
+        gameEl.addEventListener("touchcancel", e => releasePaddle(e));
 
         window.addEventListener("resize", e => this.resizeOffscreenCanvas(e));
     }

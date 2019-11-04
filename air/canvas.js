@@ -16,6 +16,9 @@ class Canvas {
     get gameCanvas() {
         return this.game;
     }
+    get uiCanvas() {
+        return this.ui;
+    }
     init() {
         this.resizeCanvas(true);
         this.scale(this.backgroundCtx);
@@ -46,7 +49,7 @@ class Canvas {
             this.setBackground();
         }
     }
-    initBackground(table) {
+    initBackground(table, statics) {
         const tableMap = field.buildTableMap();
 
         tableMap.map(edge => {
@@ -58,6 +61,14 @@ class Canvas {
                 color: "white",
             });
         });
+        for (let i = 0; i < statics.length; i++) {
+            this.staticObjects.push({
+                type: "edge",
+                body: table,
+                fixture: statics[i],
+                color: "white",
+            });
+        }
         this.setBackground();
     }
     setBackground() {
