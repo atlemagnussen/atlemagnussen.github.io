@@ -13,6 +13,9 @@ class Canvas {
         this.uiCtx = this.ui.getContext("2d");
         this.staticObjects = [];
     }
+    get gameCanvas() {
+        return this.game;
+    }
     init() {
         this.resizeCanvas(true);
         this.scale(this.backgroundCtx);
