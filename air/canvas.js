@@ -5,6 +5,7 @@ const { Vec2, World, Edge, Circle } = planck;
 
 class Canvas {
     constructor() {
+        this.wrapper = document.getElementById("game-wrapper");
         this.background = document.getElementById("background");
         this.backgroundCtx = this.background.getContext("2d");
         this.game = document.getElementById("game");
@@ -23,7 +24,7 @@ class Canvas {
         this.resizeCanvas(true);
         this.scale(this.backgroundCtx);
         window.addEventListener("resize", () => this.resizeCanvas());
-        this.game.addEventListener("dblclick", e => this.fullscreen(e));
+        document.addEventListener("dblclick", e => this.fullscreen(e));
     }
     setSize(ctx, w, h) {
         ctx.width = w;
@@ -96,7 +97,7 @@ class Canvas {
         this.gameCtx.drawImage(ctxBuf, -this.game.width / 2, -this.game.height / 2);
     }
     fullscreen() {
-        const el = document.body;
+        const el = this.wrapper;
         if (el.requestFullscreen) {
             el.requestFullscreen();
         } else if (el.mozRequestFullScreen) {

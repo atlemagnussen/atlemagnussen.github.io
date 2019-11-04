@@ -210,7 +210,7 @@ class PlanckTest {
                 this.activePad.applyForce(vector, Vec2(this.activePad.getPosition()), true);
                 this.activePadStartVec = Vec2(pos.x, pos.y);
             }
-            e.stopPropagation();
+            e.preventDefault();
         };
 
         document.body.addEventListener("mousedown", e => checkPaddle(e));

@@ -8,9 +8,11 @@
         <link rel="stylesheet" href="air/style.css" />
     </head>
     <body>
-        <canvas id="ui">your browser does not support canvas</canvas>
-        <canvas id="game">your browser does not support canvas</canvas>
-        <canvas id="background">your browser does not support canvas</canvas>
+        <div id="game-wrapper">
+            <canvas id="ui">your browser does not support canvas</canvas>
+            <canvas id="game">your browser does not support canvas</canvas>
+            <canvas id="background">your browser does not support canvas</canvas>
+        </div>
         <script src="https://cdn.jsdelivr.net/npm/planck-js@0.3.3/dist/planck-with-testbed.js"></script>
         <script type="module">
             import t from "/air/main.js";
