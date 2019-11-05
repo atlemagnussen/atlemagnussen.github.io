@@ -81,7 +81,7 @@ class Draw {
     }
     text(ctx, o) {
         if (o.visible) {
-            ctx.font = "2px Georgia";
+            ctx.font = o.font ? o.font : "2px Georgia";
             ctx.fillStyle = o.color ? o.color : "red";
             ctx.fillText(o.text, o.pos.x, o.pos.y);
         }

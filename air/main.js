@@ -7,6 +7,10 @@ const { Vec2, World, Edge, Circle } = planck;
 class PlanckTest {
     constructor() {
         this.dynamicObjects = [];
+        this.score = {
+            p1: 0,
+            p2: 0,
+        };
     }
     renderer() {
         const dt = 1 / 60;
@@ -61,18 +65,23 @@ class PlanckTest {
         this.goal2Sensor = table.createFixture(Edge(Vec2(-4, -22.5), Vec2(4, -22.5)), goalFixureDefinition);
         const statics = [this.goal1Sensor, this.goal2Sensor];
         //Create Paddle Blocking Walls
-        statics.push(table.createFixture(Edge(Vec2(-4, 21), Vec2(4, 21)), {
-            filterMaskBits: 0x0002,
-        }));
-        statics.push(table.createFixture(Edge(Vec2(-4, -21), Vec2(4, -21)), {
-            filterMaskBits: 0x0002,
-        }));
-        statics.push(table.createFixture(Edge(Vec2(-12, 0), Vec2(12, 0)), {
-            filterMaskBits: 0x0002,
-        }));
+        statics.push(
+            table.createFixture(Edge(Vec2(-4, 21), Vec2(4, 21)), {
+                filterMaskBits: 0x0002,
+            })
+        );
+        statics.push(
+            table.createFixture(Edge(Vec2(-4, -21), Vec2(4, -21)), {
+                filterMaskBits: 0x0002,
+            })
+        );
+        statics.push(
+            table.createFixture(Edge(Vec2(-12, 0), Vec2(12, 0)), {
+                filterMaskBits: 0x0002,
+            })
+        );
 
-        
-        canvas.initBackground(table, statics);
+        canvas.initBackground(table, statics, this.score);
         this.createPuck();
         this.createPaddles();
         this.world.on("begin-contact", e => this.handleContact(e));
@@ -81,9 +90,11 @@ class PlanckTest {
         const fixtureA = contact.getFixtureA();
         //const fixtureB = contact.getFixtureB();
         if (fixtureA == this.goal1Sensor) {
+            this.score.p1 += 1;
             this.alertGoal("player1");
         }
         if (fixtureA == this.goal2Sensor) {
+            this.score.p2 += 1;
             this.alertGoal("player2");
         }
     }

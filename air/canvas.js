@@ -50,9 +50,9 @@ class Canvas {
             this.setBackground();
         }
     }
-    initBackground(table, statics) {
+    initBackground(table, statics, score) {
         const tableMap = field.buildTableMap();
-
+        this.score = score;
         tableMap.map(edge => {
             const fixture = table.createFixture(Edge(Vec2(edge.from.x, edge.from.y), Vec2(edge.to.x, edge.to.y)));
             this.staticObjects.push({
@@ -74,6 +74,7 @@ class Canvas {
     }
     setBackground() {
         this.setBackgroundColor();
+        this.setScore();
         this.drawTable();
     }
     setBackgroundColor() {
@@ -115,7 +116,25 @@ class Canvas {
         this.textField.visible = false;
         this.setBackground();
     }
+    setScore() {
+        if (this.scoreField) {
+            this.scoreField.text = `Player1 ${this.score.p1} - ${this.score.p2} Player2`;
+        } else {
+            this.scoreField = {
+                type: "text",
+                text: `Player1 ${this.score.p1} - ${this.score.p2} Player2`,
+                pos: {
+                    x: -9,
+                    y: -25,
+                },
+                visible: true,
+                color: "white",
+            };
+            this.staticObjects.push(this.scoreField);
+        }
+    }
     flashText(txt) {
+        this.setScore();
         if (this.textField) {
             this.textField.text = txt;
             this.textField.visible = true;
@@ -128,12 +147,12 @@ class Canvas {
                     y: -1,
                 },
                 visible: true,
-                color: "white",
+                color: "red",
             };
             this.staticObjects.push(this.textField);
         }
         this.setBackground();
-        setTimeout(() => this.unflashText(), 5000);
+        setTimeout(() => this.unflashText(), 2000);
     }
 }
 
