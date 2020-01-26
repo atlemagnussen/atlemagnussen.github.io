@@ -4,43 +4,51 @@
 //         type: "square",
 //     },
 // }).toDestination();
+
+import * as notes from "./notes.js";
+
 const synth = new Tone.PolySynth().toDestination();
-const notes = [
-    ["C4", "C5", "D5", "E5", "D5", "C5"],
-    ["A3", "A4", "B4", "C5", "B4", "A4"],
-    ["F3", "F4", "G4", "A4", "G4", "F4"],
-    ["G3", "G4", "A4", "B4", "C5", "B4", "A4", "G4"],
-];
+
+const piano = new Tone.Sequence(
+    function(time, note) {
+        synth.triggerAttackRelease(note, "9n", time);
+    },
+    notes.piano,
+    "8n"
+);
 
 const btnPlay = document.getElementById("btnPlay");
 btnPlay.addEventListener("click", () => {
-    play();
+    toggle();
 });
-
-const btnStop = document.getElementById("btnStop");
-btnStop.addEventListener("click", () => {
-    stop();
+const btnMute = document.getElementById("btnMute");
+btnMute.addEventListener("click", () => {
+    mute();
 });
+const toggle = () => {
+    if (btnPlay.textContent === "play") {
+        btnPlay.textContent = "stop";
+        play();
+    } else {
+        btnPlay.textContent = "play";
+        Tone.Transport.stop();
+        piano.stop();
+    }
+};
 
 const play = () => {
+    piano.start();
     Tone.start();
-    Tone.Transport.scheduleRepeat(repeat, "8n");
-    Tone.Transport.start();
+    // Tone.Transport.bpm.value = 200; //120 default
+    Tone.Transport.start("+0.1");
 };
-let i = 0,
-    y = 0;
-function repeat(time) {
-    let noteRow = notes[y];
-    let note = noteRow[i];
-    synth.triggerAttackRelease(note, "8n", time);
-    i += 1;
-    if (i === noteRow.length) {
-        i = 0;
-        y += 1;
-    }
-    if (y === notes.length) y = 0;
-}
 
-const stop = () => {
-    Tone.Transport.stop();
+const mute = () => {
+    if (btnMute.textContent === "mute") {
+        btnMute.textContent = "unmute";
+        Tone.Destination.mute = true;
+    } else {
+        btnMute.textContent = "mute";
+        Tone.Destination.mute = false;
+    }
 };
