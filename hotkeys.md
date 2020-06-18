@@ -2,6 +2,7 @@
 
 # Tmux
 default mod is ctrl-b
+
 | desc                 | hotkey             | command             |
 | -------------------- | ------------------ | ------------------- |
 | list session         |                    | tmux ls             |
@@ -49,6 +50,7 @@ default mod is ctrl-b
 | equal height and width | C-w =            |          |
 
 # atles dwm
+
 | desc                               | hotkey          |
 | ---------------------------------- | --------------- |
 | Shift focus left                   | mod+j           |
