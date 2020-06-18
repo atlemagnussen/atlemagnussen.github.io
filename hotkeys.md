@@ -1,6 +1,7 @@
 # Hotkeys
 
 # Tmux
+
 | desc                 | hotkey   | command          |
 | -------------------- | -------- | ---------------- |
 | List session         |          | tmux ls          |
@@ -19,6 +20,7 @@
 | Fzf Git Files        | \<C-t\>  | :GFiles  |
 
 ## Window
+
 | desc                   | hotkey           | command  |
 | ---------------------- | ---------------- | -------- |
 | Split vertically       | C-w s | :split   |
