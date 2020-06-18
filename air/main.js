@@ -152,13 +152,6 @@ class PlanckTest {
             color: "green",
         });
 
-        const updatePosition = e => {
-            if (this.activePad) {
-                const vector = Vec2(e.movementX * config.force, e.movementY * config.force);
-
-                this.activePad.applyForce(vector, Vec2(this.activePad.getPosition()), true);
-            }
-        };
         const scaleVec = vec => {
             return Vec2(vec.x * config.scale, vec.y * config.scale);
         };
@@ -211,13 +204,19 @@ class PlanckTest {
             }
             this.activePad = null;
         };
+        const updatePosition = e => {
+            if (this.activePad) {
+                const vector = Vec2(e.movementX * config.force, e.movementY * config.force);
+                this.activePad.applyForce(vector, Vec2(this.activePad.getPosition()), true);
+            }
+        };
         const touchMove = e => {
             if (this.activePad) {
                 const pos = getMouseTouchPos(e);
-                const vector = Vec2(
-                    -(this.activePadStartVec.x - pos.x) * config.force,
-                    -(this.activePadStartVec.y - pos.y) * config.force
-                );
+                const x = -(this.activePadStartVec.x - pos.x);
+                const y = -(this.activePadStartVec.y - pos.y);
+                const vector = Vec2(x * config.force, y * config.force);
+                console.log(`x=${x}, y=${y}, force=${config.force}`);
                 this.activePad.applyForce(vector, Vec2(this.activePad.getPosition()), true);
                 this.activePadStartVec = Vec2(pos.x, pos.y);
             }
