@@ -2,12 +2,19 @@
 
 # Tmux
 
-| desc                 | hotkey   | command          |
-| -------------------- | -------- | ---------------- |
-| List session         |          | tmux ls          |
-| New session          |          | tmux new -s name |
-| Detach session       | Ctrl-b d |                  |
-| split horizontally   | Ctrl-b % |                  |
+| desc                 | hotkey            | command          |
+| -------------------- | ----------------- | ---------------- |
+| list session         |                   | tmux ls          |
+| new session          |                   | tmux new -s name |
+| detach session       | ctrl-b d          |                  |
+| split horizontally   | ctrl-b %          |                  |
+| split vertically     | ctrl-b "          |                  |
+| pane change focus    | ctrl-b arrow keys |                  |
+| resize pane          | ctrl-b ctrl-arrow |                  |
+| new window           | ctrl-n c          |                  |
+| rename window        | ctrl-b ,          |                  |
+| list windows         | ctrl-b w          |                  |
+| kill window          | ctrl-b &          |                  |
 
 # atles vim
 ## File operations
