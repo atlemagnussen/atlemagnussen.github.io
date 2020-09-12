@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test accounting</title>
+</head>
+<body>
+    <main>
+        <p>
+            <label for="loan1">Loan 1</label>
+            <input type="number" id="loan1" value="3500000" />
+        </p>
+        <p>
+            <label for="interest1">Interest 1</label>
+            <input type="number" id="interest1" value="1.3" /><span>%</span>
+        </p>
+        <p>
+            <label for="loan2">Loan 2</label>
+            <input type="number" id="loan2" value="300000" />
+        </p>
+        <p>
+            <label for="interest2">Interest 2</label>
+            <input type="number" id="interest2" value="5" /><span>%</span>
+        </p>
+        <p>....</p>
+        <p>
+            <label for="downPaymentTime1">Down payment time loan 1</label>
+            <div id="downPaymentTime1"></div>
+        </p>
+        <p>
+            <label for="downPaymentTime2">Down payment time loan 2</label>
+            <div id="downPaymentTime2"></div>
+        </p>
+        <p>....</p>
+        <p>
+            <label for="monthlyPayment">Monthly payment</label>
+            <input type="number" id="monthly" value="50000" />
+        </p>
+
+        <label for="payment">Left is loan 1 - right loan 2</label>
+        <input type="range" id="payment" min="0" max="4000" value="3000" step="100">
+        <div id="paymentValue"></div>
+
+    </main>
+    <script type="module" src="./acc.js"></script>
+</body>
+</html>
