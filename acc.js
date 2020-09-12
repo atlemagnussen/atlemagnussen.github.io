@@ -94,34 +94,51 @@ const calc = (loan1Amount, loan2Amount, interest1, interest2, monthlyTotal, loan
     while (loan1.running || loan2.running) {
         if (loan1.running) {
             let monthlyPay = loan1.monthly;
-            if (!loan2.running)
+            if (!loan2.running) {
                 monthlyPay = monthlyTotal;
+                if (loan2.restLoan < 0) {
+                    loan1.restLoan += loan2.restLoan;
+                    loan2.restLoan = 0;
+                }
+            }
             loan1.downPayMonths += 1;
             const rentMonth = calcLoanRentOneMonth(loan1.restLoan, loan1.interest);
             loan1.rents += rentMonth;
-            const downPayMonth = monthlyPay - rentMonth;
+            let downPayMonth = monthlyPay - rentMonth;
             loan1.restLoan -= downPayMonth;
-            details1 = `${details1}<p>
-                month ${loan1.downPayMonths}: rest: ${formatNum(loan1.restLoan)}, interest: ${formatNum(rentMonth)};
-            </p>`;
-            if (loan1.restLoan <= 0)
+
+            if (loan1.restLoan <= 0) {
                 loan1.running = false;
+                downPayMonth += loan1.restLoan;
+            }
+            details1 = `${details1}<p>
+                month ${loan1.downPayMonths}: paid: ${formatNum(downPayMonth)}, interest: ${formatNum(rentMonth)};
+            </p>`;
         }
 
         if (loan2.running) {
             let monthlyPay = loan2.monthly;
-            if (!loan1.running)
+            if (!loan1.running) {
                 monthlyPay = monthlyTotal;
+                if (loan1.restLoan < 0) {
+                    loan2.restLoan += loan1.restLoan;
+                    loan1.restLoan = 0;
+                }
+            }
+
             loan2.downPayMonths += 1;
             const rentMonth = calcLoanRentOneMonth(loan2.restLoan, loan2.interest);
             loan2.rents += rentMonth;
-            const downPayMonth = monthlyPay - rentMonth;
+            let downPayMonth = monthlyPay - rentMonth;
             loan2.restLoan -= downPayMonth;
-            details2 = `${details2}<p>
-                month ${loan2.downPayMonths}: rest: ${formatNum(loan2.restLoan)}, interest: ${formatNum(rentMonth)};
-            </p>`;
-            if (loan2.restLoan <= 0)
+            
+            if (loan2.restLoan <= 0) {
                 loan2.running = false;
+                downPayMonth += loan2.restLoan;
+            }
+            details2 = `${details2}<p>
+                month ${loan2.downPayMonths}: paid: ${formatNum(downPayMonth)}, interest: ${formatNum(rentMonth)};
+            </p>`;    
         }
     }
     details1 = `${details1}</details>`;
@@ -139,7 +156,9 @@ const formatLoanTotals = (loan) => {
     return text;
 };
 const formatNum = (num) => {
-    const n = Math.round((num + Number.EPSILON) * 100) / 100;
+    let n = 0;
+    if (num > 0)
+        n = Math.round((num + Number.EPSILON) * 100) / 100;
     return norNum.format(n);
 };
 const calcLoanRentOneMonth = (loan, interest) => {
