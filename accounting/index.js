@@ -18,6 +18,11 @@ const init = () => {
     const onChange = (e) => {
 
     };
+
+    const calc = (loan1, loan2, interest1, interest2, monthly) => {
+        inputPayment.value = monthly;
+        inputPayment.max = monthly;
+    };
 };
 
 init();
