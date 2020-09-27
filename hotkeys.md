@@ -12,7 +12,7 @@ default mod is ctrl-b for Tmux and ctrl-a for Screen. But I might have flipped.
 | detach session        | mod d              | mod d    |                     |                       |
 |                       |                    |          |                     |                       |
 | split horizontally    | mod %              | mod S    |                     |                       |
-| split vertically      | mod "              | mod |    |                     |                       |
+| split vertically      | mod "              | mod `|`  |                     |                       |
 | pane change focus     | mod arrow keys     | mod tab  |                     |                       |
 | resize pane           | mod ctrl-arrow key |          |                     |                       |
 |                       |                    |          |                     |                       |
