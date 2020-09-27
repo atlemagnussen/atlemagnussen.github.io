@@ -3,26 +3,26 @@
 # Tmux / Screen
 default mod is ctrl-b for Tmux and ctrl-a for Screen. But I might have flipped.
 
-| desc                  | hotkey tmux        | screen   | command tmux        | screen                |
-| --------------------- | -------------------|--------- | --------------------|---------------------- |
-| list session          |                    |          | tmux ls             | screen -ls            |
-| new session           |                    |          | tmux new -s name    | screen -S name        |
-| attach session        |                    |          | tmux attach -t name | screen -r name        |
-| attach shared session |                    |          |                     | screen -x name        |
-| detach session        | mod d              | mod d    |                     |                       |
-|                       |                    |          |                     |                       |
-| split horizontally    | mod %              | mod S    |                     |                       |
-| split vertically      | mod "              | mod `|`  |                     |                       |
-| pane change focus     | mod arrow keys     | mod tab  |                     |                       |
-| resize pane           | mod ctrl-arrow key |          |                     |                       |
-|                       |                    |          |                     |                       |
-| new window            | mod c              | mod c    |                     |                       |
-| rename window         | mod ,              | mod a    |                     |                       |
-| switch window         | mod #num           | mod #num |                     |                       |
-| next window           | mod n              |          |                     |                       |
-| previous window       | mod p              |          |                     |                       |
-| list windows          | mod w              |          |                     |                       |
-| kill window           | mod &              |          |                     |                       |
+| desc                  | hotkey tmux        | screen     | command tmux        | screen                |
+| --------------------- | -------------------|----------- | --------------------|---------------------- |
+| list session          |                    |            | tmux ls             | screen -ls            |
+| new session           |                    |            | tmux new -s name    | screen -S name        |
+| attach session        |                    |            | tmux attach -t name | screen -r name        |
+| attach shared session |                    |            |                     | screen -x name        |
+| detach session        | mod d              | mod d      |                     |                       |
+|                       |                    |            |                     |                       |
+| split horizontally    | mod %              | mod S      |                     |                       |
+| split vertically      | mod "              | mod &#124; |                     |                       |
+| pane change focus     | mod arrow keys     | mod tab    |                     |                       |
+| resize pane           | mod ctrl-arrow key |            |                     |                       |
+|                       |                    |            |                     |                       |
+| new window            | mod c              | mod c      |                     |                       |
+| rename window         | mod ,              | mod a      |                     |                       |
+| switch window         | mod #num           | mod #num   |                     |                       |
+| next window           | mod n              |            |                     |                       |
+| previous window       | mod p              |            |                     |                       |
+| list windows          | mod w              |            |                     |                       |
+| kill window           | mod &              |            |                     |                       |
 
 # atles vim
 ## File operations
