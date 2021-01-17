@@ -1,6 +1,6 @@
 const norNum = new Intl.NumberFormat("nb-NO", { style: "decimal", minimumFractionDigits: 2 });
 
-let inputLoan1, inputLoan2, inputInt1, inputInt2, inputMonthly, inputPayment;
+let inputLoan1, inputLoan2, inputInt1, inputInt2, inputMonthly, inputPayment, inputPayment1, inputPayment2;
 let paymentValue, downPaymentTime1, downPaymentTime2, totalRents;
 
 const restoreLocalStore = (element, key) => {
@@ -30,10 +30,13 @@ const init = () => {
     restoreLocalStore(inputInt2, "interest2");
     inputInt2.addEventListener("change", onChange);
 
-    inputPayment = document.querySelector("#payment");
+    inputPayment = document.querySelector("#paymentSlider");
     restoreLocalStore(inputPayment, "loan1Payment");
     inputPayment.addEventListener("change", onChange);
     paymentValue = document.querySelector("#paymentValue");
+
+    inputPayment1 = document.querySelector("#payment1");
+    inputPayment2 = document.querySelector("#payment2");
 
     inputMonthly = document.querySelector("#monthlyTotal");
     restoreLocalStore(inputMonthly, "monthlyTotal");
@@ -77,6 +80,7 @@ const calc = (loan1Amount, loan2Amount, interest1, interest2, monthlyTotal, loan
         rents: 0,
         monthly: loan1Payment
     };
+    
     loan1.restLoan = loan1.totalAmount;
     const loan2 = {
         totalAmount: loan2Amount,
@@ -86,8 +90,11 @@ const calc = (loan1Amount, loan2Amount, interest1, interest2, monthlyTotal, loan
         rents: 0,
         monthly: monthlyTotal - loan1Payment
     };
+    
     loan2.restLoan = loan2.totalAmount;
-    paymentValue.innerHTML = `loan 1: ${formatNum(loan1.monthly)}<br>loan 2: ${formatNum(loan2.monthly)}`;
+    inputPayment1.value = loan1.monthly;
+    inputPayment2.value = loan2.monthly;
+    
 
     let details1 = "<details><summary>Details</summary>";
     let details2 = "<details><summary>Details</summary>";
@@ -152,7 +159,7 @@ const calc = (loan1Amount, loan2Amount, interest1, interest2, monthlyTotal, loan
 
 const formatLoanTotals = (loan) => {
     const text = `downpay time: <b>${calcYears(loan.downPayMonths)}</b> <br>
-            rents: ${formatNum(loan.rents)}`;
+            total interest: ${formatNum(loan.rents)}`;
     return text;
 };
 const formatNum = (num) => {
