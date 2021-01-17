@@ -36,7 +36,9 @@ const init = () => {
     paymentValue = document.querySelector("#paymentValue");
 
     inputPayment1 = document.querySelector("#payment1");
+    inputPayment1.addEventListener("change", inputPayment1Change);
     inputPayment2 = document.querySelector("#payment2");
+    inputPayment2.addEventListener("change", inputPayment2Change);
 
     inputMonthly = document.querySelector("#monthlyTotal");
     restoreLocalStore(inputMonthly, "monthlyTotal");
@@ -45,6 +47,22 @@ const init = () => {
     downPaymentTime1 = document.querySelector("#downPaymentTime1");
     downPaymentTime2 = document.querySelector("#downPaymentTime2");
     totalRents = document.querySelector("#totalRents");
+};
+
+const inputPayment1Change = () => {
+    const val1 = inputPayment1.value;
+    inputPayment.value = val1;
+    const val2 = inputMonthly.value - val1;
+    inputPayment2.value = val2;
+    onChange();
+};
+
+const inputPayment2Change = () => {
+    const val2 = inputPayment2.value;
+    const val1 = inputMonthly.value - val2;
+    inputPayment1.value = val1;
+    inputPayment.value = val1;
+    onChange();
 };
 
 const onChange = () => {
