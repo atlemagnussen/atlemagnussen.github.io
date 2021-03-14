@@ -1,6 +1,7 @@
 # Hotkeys
 
-# Tmux / Screen
+## Tmux / Screen
+
 default mod is ctrl-b for Tmux and ctrl-a for Screen. But I might have flipped.
 
 | desc                  | hotkey tmux        | screen     | command tmux        | screen                |
@@ -24,8 +25,9 @@ default mod is ctrl-b for Tmux and ctrl-a for Screen. But I might have flipped.
 | list windows          | mod w              |            |                     |                       |
 | kill window           | mod &              |            |                     |                       |
 
-# atles vim
-## File operations
+## atles vim
+
+### File operations
 
 | desc                 | hotkey   | command  |
 | -------------------- | -------- | -------- |
@@ -34,7 +36,7 @@ default mod is ctrl-b for Tmux and ctrl-a for Screen. But I might have flipped.
 | Ag silver search     |          | :Ag      |
 | Fzf Git Files        | \<C-t\>  | :GFiles  |
 
-## Window
+### Window
 
 | desc                   | hotkey           | command  |
 | ---------------------- | ---------------- | -------- |
@@ -50,7 +52,7 @@ default mod is ctrl-b for Tmux and ctrl-a for Screen. But I might have flipped.
 | decrease height        | C-w -            |          |
 | equal height and width | C-w =            |          |
 
-# atles dwm
+## atles dwm
 
 | desc                               | hotkey          |
 | ---------------------------------- | --------------- |
