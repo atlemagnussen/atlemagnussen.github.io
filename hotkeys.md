@@ -1,5 +1,7 @@
 # Hotkeys
 
+[i3/sway](https://i3wm.org/docs/refcard.html)
+
 ## Tmux / Screen
 
 default mod is ctrl-b for Tmux and ctrl-a for Screen. But I might have flipped.
