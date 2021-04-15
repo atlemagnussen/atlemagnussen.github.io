@@ -1,0 +1,29 @@
+.falling-leaves {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    background-size: cover;
+    overflow: hidden;
+}
+  
+.leaf-scene {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    transform-style: preserve-3d;
+}
+
+.leaf-scene div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    background: url(/images/leaf.svg) no-repeat;
+    background-size: 100%;
+    transform-style: preserve-3d;
+    backface-visibility: visible;
+}
