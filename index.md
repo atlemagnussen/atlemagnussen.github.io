@@ -11,16 +11,15 @@
     </p>
     <h2>Div mess</h2>
     <p class="links">
-        <a href="game">game</a><br />
-        <a href="box2d">box2d test</a><br />
-        <a href="planck">planck test</a><br />
-        <a href="pixitest">pixi test</a><br />
-        <a href="airhockey">airhockey</a><br />
-        <a href="tonejs">tonejs</a><br />
-        <a href="hotkeys">hotkeys</a><br />
-        <a href="acc">accounting</a><br />
-        <a href="inputfile">test input file</a><br />
-        <a href="img1">img1</a><br />
-        <a href="img2">img2</a><br />
+        <a href="pages/game">game</a><br />
+        <a href="pages/box2d">box2d test</a><br />
+        <a href="pages/planck">planck test</a><br />
+        <a href="pages/pixitest">pixi test</a><br />
+        <a href="pages/airhockey">airhockey</a><br />
+        <a href="pages/tonejs">tonejs</a><br />
+        <a href="pages/acc">accounting</a><br />
+        <a href="pages/inputfile">test input file</a><br />
+        <a href="pages/img1">img1</a><br />
+        <a href="pages/img2">img2</a><br />
     </p>
 </section>
