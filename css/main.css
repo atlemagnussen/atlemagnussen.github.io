@@ -4,7 +4,6 @@ body {
     width: 100%;
     max-width: 100%;
     min-width: 100%;
-    overflow: hidden;
 }
 body {
     margin: 0;
@@ -18,4 +17,28 @@ main {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+a, h1, h2, h3 {
+    color: #63022a;
+}
+.links {
+    /* backdrop-filter: blur(5px); */
+    /* backdrop-filter: brightness(120%); */
+    /* backdrop-filter: contrast(10%); */
+    /* backdrop-filter: drop-shadow(4px 4px 10px blue); */
+    /* backdrop-filter: grayscale(100%); */
+    /* backdrop-filter: hue-rotate(120deg); */
+    /* backdrop-filter: invert(70%); */
+    /* backdrop-filter: opacity(20%); */
+    backdrop-filter: sepia(90%);
+    /* backdrop-filter: saturate(80%); */
+    padding: 1rem;
+    border-radius: 5px;
+    text-align: center;
+    width: 120px;
+}
+
+table {
+    backdrop-filter: sepia(90%);
+    color: #63022a;
 }

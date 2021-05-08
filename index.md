@@ -1,7 +1,8 @@
 
 <header>
     <h1>Here I just test things</h1>
-    <p>I also have a real <a href="https://backslash.site">blog</a></p>
+    <p>I also have a kind of <a href="https://backslash.site">blog</a></p>
+    <p>And a <a href="https://github.com/atlemagnussen">github account</a>
 </header>
 <section>
     <h2>Things I forget</h2>
