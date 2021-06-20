@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        // CSS.paintWorklet.addModule("https://unpkg.com/houdini-static-gradient@1.1.2/worklet.js")
+        CSS.paintWorklet.addModule("worklet.js")
+    </script>
+</head>
+<body>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        html, body {
+            height: 100%;
+        }
+        body {
+            display: grid;
+            place-items: center center;
+            margin: 0;
+            background-color: black;
+            color: whitesmoke;
+        }
+        .outer {
+            display: grid;
+            place-items: center center;
+            width: 70%;
+            height: 70%;
+            /* --static-gradient-size: 10;
+            --static-gradient-color: #f01919; */
+            background: paint(static-gradient), #042014;
+            --static-gradient-color: #2f4050;
+            font-size: 3rem;
+        }
+        .inner {
+            font-family: "Roboto Mono", monospace;
+        }
+    </style>
+    <div class="outer">
+        <div class="inner">
+            test
+        </div>
+    </div>
+    
+</body>
+</html>
