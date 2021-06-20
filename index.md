@@ -20,5 +20,6 @@
         <a href="pages/tonejs">tonejs</a><br />
         <a href="pages/acc">accounting</a><br />
         <a href="pages/inputfile">test input file</a><br />
+        <a href="pages/testcsspaint">test css paint</a><br />
     </p>
 </section>
