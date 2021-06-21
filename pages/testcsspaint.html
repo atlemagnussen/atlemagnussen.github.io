@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Test CSS paintlet</title>
     <script>
         // CSS.paintWorklet.addModule("https://unpkg.com/houdini-static-gradient@1.1.2/worklet.js")
         CSS.paintWorklet.addModule("worklet.js")
+        CSS.paintWorklet.addModule("https://unpkg.com/css-houdini-voronoi@1.1.5/dist/worklet.js")
     </script>
 </head>
 <body>
@@ -28,8 +29,8 @@
         .outer {
             display: grid;
             place-items: center center;
-            width: 70%;
-            height: 70%;
+            width: 500px;
+            height: 500px;
             /* --static-gradient-size: 10;
             --static-gradient-color: #f01919; */
             background: paint(static-gradient), #042014;
@@ -39,12 +40,62 @@
         .inner {
             font-family: "Roboto Mono", monospace;
         }
+        .another {
+            display: grid;
+            place-items: center center;
+            width: 500px;
+            height: 500px;
+            --voronoi-cell-colors: #2f4050, #1c84c6, #0099de;
+            --voronoi-number-of-cells: 30;
+            --voronoi-line-color: #11171d;
+            --voronoi-line-width: 3;
+            background: paint(voronoi);
+            font-size: 3rem;
+        }
+        .loop1 {
+            --voronoi-number-of-cells: 40;
+        }
+        .loop2 {
+            --voronoi-number-of-cells: 50;
+        }
+        .loop3 {
+            --voronoi-number-of-cells: 60;
+        }
+        .loop4 {
+            --voronoi-number-of-cells: 70;
+        }
+        .loop5 {
+            --voronoi-number-of-cells: 80;
+        }
+        .loop6 {
+            --voronoi-number-of-cells: 90;
+        }
+        .loop7 {
+            --voronoi-number-of-cells: 100;
+        }
+        .loop8 {
+            --voronoi-number-of-cells: 110;
+        }
+        .loop9 {
+            --voronoi-number-of-cells: 120;
+        }
+        .loop10 {
+            --voronoi-number-of-cells: 130;
+        }
     </style>
     <div class="outer">
         <div class="inner">
             test
         </div>
     </div>
-    
+    <div class="another">
+        <div class="inner">
+            test
+        </div>
+    </div>
+    <script type="module">
+        import { rotate } from "./testcss.js"
+        rotate(".another")
+    </script>
 </body>
 </html>
