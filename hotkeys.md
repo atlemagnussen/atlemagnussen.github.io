@@ -55,6 +55,7 @@ default mod is ctrl-b for Tmux and ctrl-a for Screen. But I might have flipped.
 | equal height and width | C-w =            |          |
 
 ### LSP
+
 | desc                   | hotkey           | command |
 | ---------------------- | ---------------- | ------- |
 | go declaration         | gD               |         |
