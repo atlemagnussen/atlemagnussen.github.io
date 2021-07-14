@@ -39,6 +39,7 @@ a, h1, h2, h3 {
 }
 
 table {
+    background: white;
     backdrop-filter: sepia(90%);
     color: #63022a;
 }

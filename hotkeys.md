@@ -27,7 +27,7 @@ default mod is ctrl-b for Tmux and ctrl-a for Screen. But I might have flipped.
 | list windows          | mod w              |            |                     |                       |
 | kill window           | mod &              |            |                     |                       |
 
-## atles vim
+## atles nvim
 
 ### File operations
 
@@ -35,7 +35,7 @@ default mod is ctrl-b for Tmux and ctrl-a for Screen. But I might have flipped.
 | -------------------- | -------- | -------- |
 | Nerdtree Toggle      | \<C-n\>  |          |
 | Nerdtree Refresh     | \<r\>    |          |
-| Ag silver search     |          | :Ag      |
+| Ag silver search     | \<F3\>   | :Ag      |
 | Fzf Git Files        | \<C-t\>  | :GFiles  |
 
 ### Window
@@ -53,6 +53,23 @@ default mod is ctrl-b for Tmux and ctrl-a for Screen. But I might have flipped.
 | increase height        | C-w +            |          |
 | decrease height        | C-w -            |          |
 | equal height and width | C-w =            |          |
+
+### LSP
+| desc                   | hotkey           | command |
+| ---------------------- | ---------------- | ------- |
+| go declaration         | gD               |         |
+| go definition          | gd               |         |
+| hover                  | K                |         |
+| go implementation      | gi               |         |
+| signature help         | \<C-k\>          |         |
+| type definition        | \<space\>D       |         |
+| rename                 | \<space\>rn      |         |
+| code actions           | \<space\>ca      |         |
+| references             | gr               |         |
+| line diagnostics       | \<space\>e       |         |
+| diagnostics next       | [d               |         |
+| diagnostics prev       | ]d               |         |
+| formatting             | \<space\>f       |         |
 
 ## atles dwm
 
