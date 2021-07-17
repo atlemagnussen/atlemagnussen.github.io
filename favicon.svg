@@ -11,7 +11,9 @@
             stroke: var(--icon-color);
         }
         @media (prefers-color-scheme: dark) {
-            --icon-color: #FFF;
+            :root {
+                --icon-color: #FFF;
+            }
         }
     </style>
   <path d="M381 115.23L89.07 327.29h360.85L157.99 115.23l111.5 343.12z" fill="none" stroke-width="25"/>
