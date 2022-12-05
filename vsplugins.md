@@ -9,3 +9,7 @@
 ## Useful
 
 - [Import Cost](https://marketplace.visualstudio.com/items?itemName=wix.vscode-import-cost) displays size of dependencies
+
+## Also remember
+
+- [Open VSX VsCodium plugins](https://open-vsx.org/)
